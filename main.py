@@ -15,6 +15,7 @@ maxVariance = 180
 cd = 0.82 
 ci = 1.18 
 
+
 # Iterations to compute the improve ratio
 ItImproveRatio = 10
 
