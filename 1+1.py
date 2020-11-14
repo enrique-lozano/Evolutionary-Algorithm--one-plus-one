@@ -8,13 +8,11 @@ website = "http://163.117.164.219/age/robot4?"
 numMotores = 4
 
 # To initialize the variances vector
-minVariance = 0
+minVariance = 60
 maxVariance = 180
 
 # If the variances increase, solutions are being obtained every better times and at some point the optimal
-cd = 0.82 
-ci = 1.18 
-
+c = 0.82 
 
 # Iterations to compute the improve ratio
 ItImproveRatio = 10
@@ -44,9 +42,9 @@ def var_mutation(variances, lastIterations):
 
     for i in range(numMotores):
         if improveRatio<0.2:
-            new_variances[i] = variances[i] * cd
+            new_variances[i] = variances[i] * c
         if improveRatio>0.2:
-            new_variances[i] = variances[i] * ci
+            new_variances[i] = variances[i] / c
     
     return new_variances
 
@@ -82,11 +80,19 @@ lastIterations = [] # 0 not improve, 1 improve
 inizialization(coefficients, variances)
 fitness1 = evaluation(coefficients) # Minimum value of fitness always in fitness1
 
-for i in range(2005):
+doc_results = open("1+1results.txt","a")
+
+for i in range(200000):
     print("-----------------------------")
     print("-----------------------------")
     print("Coef. ->" + str(coefficients))
     print("Var. ->" + str(variances))
+
+    totalVariances = 0
+    for var in variances:
+        totalVariances = totalVariances + var
+    if totalVariances<0.005:
+        break
 
     new_coefficients = coef_mutation(coefficients,variances)
     fitness2 = evaluation(new_coefficients)
@@ -99,4 +105,11 @@ for i in range(2005):
         fitness1 = fitness2
     variances = var_mutation(variances, lastIterations)
     print(lastIterations)
+
+    doc_results.write(str(i) + " " + str(fitness1) + "\n")
     
+doc_results.close()
+print("-----------------------------")
+print("-----------FINISH------------")
+print("--Final value: " + str(fitness1) + "--")
+print("-----------------------------")
