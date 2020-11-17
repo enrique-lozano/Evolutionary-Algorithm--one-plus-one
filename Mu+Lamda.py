@@ -14,9 +14,12 @@ numMotores = 4
 minVariance = 60
 maxVariance = 180
 
-sizePopulation = 4  # Size of the population
-lambdaValue = 3     # Number of individuals that will change in the next population
+sizePopulation = 100  # Size of the population
+lambdaValue = 30     # Number of individuals that will change in the next population
+sizeFamily = 2       # Number of parents to generate new individuals
 b = 1               # To do the mutation in the variances
+percTournament = 0.3 # Only applies if tournament selected (see reproduction function)
+
 
 # ----------FUNCTIONS-------------
 
@@ -50,6 +53,21 @@ def individual_evaluation(coefficients):
     r = requests.get(website + aux)
     return float(r.text)
 
+def tournament(all_data):
+    tournamentSize = math.floor(sizePopulation * percTournament)
+    
+    new_population = []
+    for i in range(sizeFamily):
+        participants = random.choices(all_data, k=tournamentSize)
+        min = participants[0]
+
+        for participant in participants:
+            if int(participant[2]) < int(min[2]):
+                min = participant
+        new_population.append(min)
+    
+    return new_population
+
 def genera_ruleta(population, fitness):
     # lower values generate higher probabilities. That's why we do 1/fitness
     total_fitness = 0
@@ -69,19 +87,27 @@ def reproduccion(all_data):
     new_population_variances = []
 
     for i in range(lambdaValue):
-
-        parents = random.choices(all_data, probabilities, k=2) # Two parents: parents[0] & parents[1]
+        # Comentar una de las dos lineas de debajo: 1-Torneos. 2-Ruleta
+        parents = tournament(all_data)
+        #parents = random.choices(all_data, probabilities, k=sizeFamily) # k parents: parents[0], parents[1]...
+     
         # Puede que el mejor individuo sea seleccionado
 
         son_coefficients = []
         son_variances = []
 
         for i in range(numMotores): #CRUCE
-            # Mean of parental coefficients
-            son_coefficients.append((parents[0][0][i]+parents[1][0][i])/2)
+            sum_coef = 0
+            choices = []
+            for parent in range(sizeFamily):
+                # Mean of parental coefficients
+                sum_coef = sum_coef + parents[parent][0][i]
 
-            # Random choice between the variances of the parents
-            son_variances.append(random.choice([parents[0][1][i],parents[1][1][i]]))
+                # Random choice between the variances of the parents
+                choices.append(parents[parent][1][i])
+                   
+            son_coefficients.append(sum_coef/sizeFamily) #Mean
+            son_variances.append(random.choice(choices)) #Random choice
 
         # MUTACION
         son_coefficients = coef_mutation(son_coefficients, son_variances)
@@ -158,7 +184,7 @@ for round in range(200000):
     
     doc_results.write(str(round) + " " + str(all_data[0][2]) + "\n")
 
-    print_population(all_data)
+    #print_population(all_data)
 
     intermedia, intermedia_varianzas = reproduccion(all_data)
 
@@ -169,6 +195,7 @@ for round in range(200000):
         all_data[sizePopulation+i].append(individual_evaluation(intermedia[i]))
     all_data.sort(key=sortKey)
 
+    # In inclusion replacement, both parents and children descendants compete to be included in the new population.
     fitness = []
     for i in range(sizePopulation):
         population[i] = all_data[i][0]
