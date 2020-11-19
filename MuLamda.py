@@ -11,7 +11,7 @@ website = "http://163.117.164.219/age/robot4?"
 numMotores = 4
 
 # To initialize the variances vector
-minVariance = 60
+minVariance = 100
 maxVariance = 180
 
 sizePopulation = 100  # Size of the population
@@ -49,7 +49,13 @@ def population_evaluation(population):
 
 def individual_evaluation(coefficients):  
     aux = "c1=" + str(coefficients[0]) + "&c2=" + str(coefficients[1]) + "&c3=" + str(coefficients[2]) + "&c4=" + str(coefficients[3])
-    r = requests.get(website + aux)
+    done = False
+    while (not done):
+        try:
+            r = requests.get(website + aux)
+            done = True
+        except:
+            print("Waiting for the server.................")
     return float(r.text)
 
 def tournament(all_data):
@@ -137,61 +143,69 @@ def sortKey(e):
 
 
 # -------------CODE----------------
+for i in range(5):
 
-population = []             # Coefficents of the population
-population_variances = []   # Variances of the population
-fitness = []                # Fitness of the population
-probabilities = []          # Probability of be a parent
+    population = []             # Coefficents of the population
+    population_variances = []   # Variances of the population
+    fitness = []                # Fitness of the population
+    probabilities = []          # Probability of be a parent
 
-population_inizialization(population, population_variances)
+    population_inizialization(population, population_variances)
 
-doc_results = open("MuLamdaResults.txt","a")
-min_fitness = 9999999
-rounds_without_improve = 0
+    doc_results = open("MuLamdaResults.txt","a")
+    min_fitness = 9999999
+    rounds_without_improve = 0
 
-for round in range(200000):
-    print("--------------------------------------------------------------")
-    print("---------------------STARTING ROUND " + str(round) + "--------------------------")
-    print("--------------------------------------------------------------")
-    fitness = population_evaluation(population)
-    probabilities = genera_ruleta(population,fitness)
 
-    all_data = []                        # [[[coef],[var],fitness,prob],[[coef],[var],fitness,prob],...]
-    for i in range(sizePopulation):
-        all_data.append([])               
-        all_data[i].append(population[i])
-        all_data[i].append(population_variances[i])
-        all_data[i].append(fitness[i])
-        all_data[i].append(probabilities[i])
+    for round in range(500):
+        print("--------------------------------------------------------------")
+        print("---------------------STARTING ROUND " + str(round) + "--------------------------")
+        print("--------------------------------------------------------------")
+        fitness = population_evaluation(population)
+        
+        try:
+            probabilities = genera_ruleta(population,fitness)
+        except:
+            print("La mejor evaluación es: 0")
+            break
 
-    all_data.sort(key=sortKey)
-    probabilities.sort(reverse=True)
-    print("La mejor evaluación es: " + str(all_data[0][2]))
-    print("Rounds without improve: " + str(rounds_without_improve))
-    print("--------------------------------------------------------------")
+        all_data = []                        # [[[coef],[var],fitness,prob],[[coef],[var],fitness,prob],...]
+        for i in range(sizePopulation):
+            all_data.append([])               
+            all_data[i].append(population[i])
+            all_data[i].append(population_variances[i])
+            all_data[i].append(fitness[i])
+            all_data[i].append(probabilities[i])
 
-    if all_data[0][2] < min_fitness:
-        rounds_without_improve = 0
-        min_fitness = all_data[0][2]
-    else:
-        rounds_without_improve += 1
+        all_data.sort(key=sortKey)
+        probabilities.sort(reverse=True)
+        print("La mejor evaluación es: " + str(all_data[0][2]))
+        print("Rounds without improve: " + str(rounds_without_improve))
+        print("--------------------------------------------------------------")
+
+        if all_data[0][2] < min_fitness:
+            rounds_without_improve = 0
+            min_fitness = all_data[0][2]
+        else:
+            rounds_without_improve += 1
+        
+        if (rounds_without_improve>50 and round>100) or (all_data[0][2]==0.0):
+            break
+        
+        doc_results.write(str(round) + "   " + str(all_data[0][2]) + "\n")
+
+        #print_population(all_data)
+
+        intermedia, intermedia_varianzas = reproduccion(all_data)
+        
+        # Insertion. Descendants always pass the next generation and replace the parents with less fitness.
+        for i in range(lambdaValue):
+            all_data[len(all_data) - 1 - i][0] = intermedia[i]
+            all_data[len(all_data) - 1 - i][1] = intermedia_varianzas[i]
+        
+        for i in range(sizePopulation):
+            population[i] = all_data[i][0]
+            population_variances[i] = all_data[i][1]
     
-    if rounds_without_improve>50 and round>100:
-        break
-    
-    doc_results.write(str(round) + " " + str(all_data[0][2]) + "\n")
-
-    #print_population(all_data)
-
-    intermedia, intermedia_varianzas = reproduccion(all_data)
-    
-    # Insertion. Descendants always pass the next generation and replace the parents with less fitness.
-    for i in range(lambdaValue):
-        all_data[len(all_data) - 1 - i][0] = intermedia[i]
-        all_data[len(all_data) - 1 - i][1] = intermedia_varianzas[i]
-    
-    for i in range(sizePopulation):
-        population[i] = all_data[i][0]
-        population_variances[i] = all_data[i][1]
-
-doc_results.close()
+    doc_results.write("\n")
+    doc_results.close()

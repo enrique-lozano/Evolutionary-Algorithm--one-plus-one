@@ -50,7 +50,13 @@ def var_mutation(variances, lastIterations):
 
 def evaluation(coefficients):  
     aux = "c1=" + str(coefficients[0]) + "&c2=" + str(coefficients[1]) + "&c3=" + str(coefficients[2]) + "&c4=" + str(coefficients[3])
-    r = requests.get(website + aux)
+    done = False
+    while (not done):
+        try:
+            r = requests.get(website + aux)
+            done = True
+        except:
+            print("Waiting for the server.................")
     return float(r.text)
 
 def addIteration(fitness1, fitness2):
@@ -73,43 +79,45 @@ def addIteration(fitness1, fitness2):
 
 # -------------CODE----------------
 
-coefficients = []
-variances = []
-lastIterations = [] # 0 not improve, 1 improve
+for i in range(5):
+    coefficients = []
+    variances = []
+    lastIterations = [] # 0 not improve, 1 improve
 
-inizialization(coefficients, variances)
-fitness1 = evaluation(coefficients) # Minimum value of fitness always in fitness1
+    inizialization(coefficients, variances)
+    fitness1 = evaluation(coefficients) # Minimum value of fitness always in fitness1
 
-doc_results = open("1+1results.txt","a")
+    doc_results = open("1+1results.txt","a")
 
-for i in range(200000):
-    print("-----------------------------")
-    print("-----------------------------")
-    print("Coef. ->" + str(coefficients))
-    print("Var. ->" + str(variances))
+    for i in range(1000):
+        print("-----------------------------")
+        print("-----------------------------")
+        print("Coef. ->" + str(coefficients))
+        print("Var. ->" + str(variances))
 
-    totalVariances = 0
-    for var in variances:
-        totalVariances = totalVariances + var
-    if totalVariances<0.005:
-        break
+        totalVariances = 0
+        for var in variances:
+            totalVariances = totalVariances + var
+        if totalVariances<0.005:
+            break
 
-    new_coefficients = coef_mutation(coefficients,variances)
-    fitness2 = evaluation(new_coefficients)
-    lastIterations = addIteration(fitness1, fitness2)
-    print("Fitness1 value: " + str(fitness1))
-    print("Fitness2 value: " + str(fitness2))
-    if fitness2 < fitness1:
-        coefficients = new_coefficients
-        print("New coefficients vector....")
-        fitness1 = fitness2
-    variances = var_mutation(variances, lastIterations)
-    print(lastIterations)
+        new_coefficients = coef_mutation(coefficients,variances)
+        fitness2 = evaluation(new_coefficients)
+        lastIterations = addIteration(fitness1, fitness2)
+        #print("Fitness1 value: " + str(fitness1))
+        #print("Fitness2 value: " + str(fitness2))
+        if fitness2 < fitness1:
+            coefficients = new_coefficients
+            #print("New coefficients vector....")
+            fitness1 = fitness2
+        variances = var_mutation(variances, lastIterations)
+        print(lastIterations)
 
-    doc_results.write(str(i) + " " + str(fitness1) + "\n")
+        doc_results.write(str(i) + "   " + str(fitness1) + "\n")
     
-doc_results.close()
-print("-----------------------------")
-print("-----------FINISH------------")
-print("--Final value: " + str(fitness1) + "--")
-print("-----------------------------")
+    doc_results.write("\n")    
+    doc_results.close()
+    print("-----------------------------")
+    print("-----------FINISH------------")
+    print("--Final value: " + str(fitness1) + "--")
+    print("-----------------------------")
