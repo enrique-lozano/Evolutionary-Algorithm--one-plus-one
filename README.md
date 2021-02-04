@@ -93,7 +93,6 @@ Example:
 ### So, what's the difference between the two algorithms?
 
 -   In (µ,λ) a replacement per **insertion** is performed in each iteration, that is, the new λ individuals always pass to the new population, replacing the worst µ individuals.
-
 -   In (µ+λ) a replacement per **inclusion** is performed in each iteration, that is, the new λ individuals compete with the old µ individuals for being in the new population.
 
 ## Issues 🤕
