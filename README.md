@@ -52,7 +52,7 @@ Once the command is entered, the execution of the script will begin, which will 
 
 As a general rule, these algorithms have one or more individuals, made up of two main components. The first is a **vector of coefficients**, which will represent the values ​​that we want to optimize, the solution to seek (in this case, the orientation of the motors). The second is a **vector of variances** with the same size as the first one, which will help us to mutate the individual, so that each iteration is usually better than the previous one.
 
-_To measure the performance of the vector of coefficients we call an external server, which will return a value, known as **fitness**. The lower this value, the better the performance of the vector of coefficients, being 0 when it's optimal_
+> To measure the performance of the vector of coefficients we call an external server, which will return a value, known as **fitness**. The lower this value, the better the performance of the vector of coefficients, being 0 when it's optimal
 
 ## Issues 🤕
 
