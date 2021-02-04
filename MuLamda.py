@@ -86,7 +86,7 @@ def genera_ruleta(population, fitness):
     return probabilities
 
     
-def reproduccion(all_data):
+def reproduction(all_data):
     
     new_population = []
     new_population_variances = []
@@ -96,7 +96,7 @@ def reproduccion(all_data):
         #parents = tournament(all_data)
         parents = random.choices(all_data, probabilities, k=sizeFamily) # k parents: parents[0], parents[1]...
         
-        # Puede que el mejor individuo sea seleccionado multiples veces. Padres iguales
+        # The best individual could be selected multiple times. Equal parents
 
         son_coefficients = []
         son_variances = []
@@ -113,7 +113,7 @@ def reproduccion(all_data):
             son_coefficients.append(sum_coef/sizeFamily) #Mean
             son_variances.append(random.choice(choices)) #Random choice
 
-        # MUTACION
+        # MUTATION
         son_coefficients = coef_mutation(son_coefficients, son_variances)
         son_variances = var_mutation(son_variances)
 
@@ -166,7 +166,7 @@ for i in range(5):
         try:
             probabilities = genera_ruleta(population,fitness)
         except:
-            print("La mejor evaluación es: 0")
+            print("The best evaluation is: 0")
             break
 
         all_data = []                        # [[[coef],[var],fitness,prob],[[coef],[var],fitness,prob],...]
@@ -179,7 +179,7 @@ for i in range(5):
 
         all_data.sort(key=sortKey)
         probabilities.sort(reverse=True)
-        print("La mejor evaluación es: " + str(all_data[0][2]))
+        print("The best evaluation is:: " + str(all_data[0][2]))
         print("Rounds without improve: " + str(rounds_without_improve))
         print("--------------------------------------------------------------")
 
@@ -196,7 +196,7 @@ for i in range(5):
 
         #print_population(all_data)
 
-        intermedia, intermedia_varianzas = reproduccion(all_data)
+        intermedia, intermedia_varianzas = reproduction(all_data)
         
         # Insertion. Descendants always pass the next generation and replace the parents with less fitness.
         for i in range(lambdaValue):
