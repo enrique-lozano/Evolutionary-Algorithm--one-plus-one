@@ -1,6 +1,12 @@
-# My-Readme-Template 💥💯
+# Evolutionary strategies ♻️📈
 
-Brief description of a few lines about the project, technologies used in the development... Use emoticons in each of the readMe titles, so that they correctly represent the section.
+This project develops 3 simple evolutionary algorithms, from the branch of evolutionary strategies (https://en.wikipedia.org/wiki/Evolution_strategy). These algorithms are:
+
+-   1+1
+-   (µ,λ)
+-   (µ+λ)
+
+Don't worry! we'll explain how it works in later sections.
 
 ## Run it 🚀
 
