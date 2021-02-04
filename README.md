@@ -58,7 +58,7 @@ As a general rule, these algorithms have one or more individuals, made up of two
 
 Here the population of each iteration is made up of a single individual. The vector of coefficients mutates following the following formula:
 
-<img src="/screenshots/sc1.png" alt="Screenshot 1" width="50%" height="50%" />
+<img src="/screenshots/sc1.PNG" alt="Screenshot 1" width="50%" height="50%" />
 
 _Where N(σ) is the gaussian distribution with SD of σ (See http://onlinestatbook.com/2/calculators/normal_dist.html)._
 
