@@ -90,7 +90,7 @@ Example:
 
 **We do that process λ times, generating λ new individuals starting from µ individuals** (population size).
 
-#### So, what's the difference between the two algorithms?
+### So, what's the difference between the two algorithms?
 
 -   In (µ,λ) a replacement per **insertion** is performed in each iteration, that is, the new λ individuals always pass to the new population, replacing the worst µ individuals.
 
