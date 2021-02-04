@@ -6,7 +6,7 @@ This project develops 3 simple evolutionary algorithms, from the branch of evolu
 -   (µ,λ)
 -   (µ+λ)
 
-Don't worry! we'll explain how the algorithms work in later sections. The final objective of the problem is to find the correct degree of inclination of a number X of motors, to carry out a certain task. This degree of inclination is a continuous number between -180 and 180 degrees
+Don't worry! we'll explain how the algorithms work in later sections. The final objective of the problem is to find the correct degree of inclination of a number X of motors, to carry out a certain task. This degree of inclination is a continuous number between -180 and 180 degrees.
 
 ## Run it 🚀
 
@@ -46,13 +46,21 @@ The script.py should be replaced for one of this:
 
 Once the command is entered, the execution of the script will begin, which will perform the specified algorithm 5 times. The results of these five iterations will appear in the **results.txt files**.
 
-**Warning:** _This project has been fully developed in python 3.7, so its operation for previous versions is not guaranteed_
+**Warning:** _This project has been fully developed in python 3.7, so its operation for previous versions is not guaranteed._
 
 ## What are these algorithms? 🧠
 
-As a general rule, these algorithms have one or more individuals, made up of two main components. The first is a **vector of coefficients**, which will represent the values ​​that we want to optimize, the solution to seek (in this case, the orientation of the motors). The second is a **vector of variances** with the same size as the first one, which will help us to mutate the individual, so that each iteration is usually better than the previous one.
+As a general rule, these algorithms have one or more individuals, made up of two main components. The first is a **vector of coefficients** (known as X), which will represent the values ​​that we want to optimize, the solution to seek (in this case, the orientation of the motors). The second is a **vector of variances** (known as σ) with the same size as the first one, which will help us to mutate the individual, so that each iteration is usually better than the previous one.
 
-> To measure the performance of the vector of coefficients we call an external server, which will return a value, known as **fitness**. The lower this value, the better the performance of the vector of coefficients, being 0 when it's optimal
+> To measure the performance of the vector of coefficients we call an external server, which will return a value, known as **fitness**. The lower this value, the better the performance of the vector of coefficients, being 0 when it's optimal.
+
+### 1+1 Algorithm
+
+Here the population of each iteration is made up of a single individual. The vector of coefficients mutates following the following formula:
+
+<img src="/screenshots/sc1.png" alt="Screenshot 1" width="50%" height="50%" />
+
+_Where N(σ) is the gaussian distribution with SD of σ (See http://onlinestatbook.com/2/calculators/normal_dist.html)._
 
 ## Issues 🤕
 
