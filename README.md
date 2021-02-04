@@ -104,7 +104,7 @@ This project depends on the operation of an external server, which may be unavai
 
 Feel free to improve and optimize the existing code. To contribute to the project, read the previous points carefully and do the next steps with the project:
 
-1. Fork it (<https://github.com/yourname/yourproject/fork>)
+1. Fork it.
 2. Create your feature branch (`git checkout -b feature/fooBar`)
 3. Commit your changes (`git commit -am 'Add some fooBar'`)
 4. Push to the branch (`git push origin feature/fooBar`)
