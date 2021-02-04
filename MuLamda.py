@@ -8,7 +8,7 @@ import math
 # ----------PARAMETERS-------------
 
 website = "http://163.117.164.219/age/robot4?"
-numMotores = 4
+numMotors = 4
 
 # To initialize the variances vector
 minVariance = 100
@@ -37,7 +37,7 @@ def population_inizialization(population, population_variances):
         population_variances.append(aux_variances)
     
 def individual_initialization(coefficients, variances):  
-    for i in range(numMotores):
+    for i in range(numMotors):
         coefficients.append(uniform(-180, 180))
         variances.append(uniform(minVariance, maxVariance))
 
@@ -100,7 +100,7 @@ def reproduccion(all_data):
 
         son_coefficients = []
         son_variances = []
-        for i in range(numMotores): #CRUCE
+        for i in range(numMotors): #CRUCE
             sum_coef = 0
             choices = []
             for parent in range(sizeFamily):
@@ -124,15 +124,15 @@ def reproduccion(all_data):
 
 def coef_mutation(coefficients, variances):
     new_coefficients = []
-    for i in range(numMotores):
+    for i in range(numMotors):
         normal = np.random.normal(0,variances[i])
         new_coefficients.append(coefficients[i] + normal)
     return new_coefficients
 
 def var_mutation(variances):
     new_variances = []
-    for i in range(numMotores):
-        t = b/math.sqrt(2*math.sqrt(numMotores))
+    for i in range(numMotors):
+        t = b/math.sqrt(2*math.sqrt(numMotors))
         normal = np.random.normal(0,t)
         new_variances.append(variances[i] * math.exp(normal))
 

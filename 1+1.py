@@ -5,7 +5,7 @@ import numpy as np
 # ----------PARAMETERS-------------
 
 website = "http://163.117.164.219/age/robot4?"
-numMotores = 4
+numMotors = 4
 
 # To initialize the variances vector
 minVariance = 60
@@ -20,13 +20,13 @@ ItImproveRatio = 10
 # ----------FUNCTIONS-------------
 
 def inizialization(coefficients, variances):  
-    for i in range(numMotores):
+    for i in range(numMotors):
         coefficients.append(uniform(-180, 180))
         variances.append(uniform(minVariance, maxVariance))
 
 def coef_mutation(coefficients, variances):
     new_coefficients = []
-    for i in range(numMotores):
+    for i in range(numMotors):
         normal = np.random.normal(0,variances[i])
         #print(normal)
         new_coefficients.append(coefficients[i] + normal)
@@ -40,7 +40,7 @@ def var_mutation(variances, lastIterations):
     improveRatio = improveRatio / len(lastIterations)
     print("Improve ratio of the last "  + str(ItImproveRatio) + " rounds: " + str(improveRatio))
 
-    for i in range(numMotores):
+    for i in range(numMotors):
         if improveRatio<0.2:
             new_variances[i] = variances[i] * c
         if improveRatio>0.2:
